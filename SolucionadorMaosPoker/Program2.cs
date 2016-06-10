@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace SolucionadorMaosPoker
 {
-    class Program
+    class Program2
     {
         public static CartaAlta cartaAlta = new CartaAlta();
         public static RoyalFlash royalFlash = new RoyalFlash();
@@ -48,7 +48,7 @@ namespace SolucionadorMaosPoker
             //{
             stopwatch.Reset();
             stopwatch.Start();
-            
+
             try
             {
                 qtdVitoriasJogador1 = SolucionadorMaosPoker();
@@ -61,9 +61,9 @@ namespace SolucionadorMaosPoker
             }
 
             stopwatch.Stop();
-            //Console.WriteLine(Process.GetCurrentProcess().PrivateMemorySize64);
+            ///Console.WriteLine(Process.GetCurrentProcess().PrivateMemorySize64);
             Console.WriteLine("Tempo gasto para execucao em segundos: " + stopwatch.ElapsedMilliseconds * 0.001);
-            
+
             //}
 
             Console.WriteLine("Quantidade de vitorias do jogador 1: " + qtdVitoriasJogador1.ToString());
@@ -80,22 +80,24 @@ namespace SolucionadorMaosPoker
             System.IO.StreamReader arquivo = new System.IO.StreamReader("pokerm.txt");
             while ((linha = arquivo.ReadLine()) != null)
             {
-                var cartas = linha.Split(' ').ToList().Select(x=> new Carta { Numero = x[0], Naipe = x[1]}).ToList();
+                var cartas = linha.Split(' ').ToList().Select(x => new Carta { Numero = x[0], Naipe = x[1] }).ToList();
                 List<Carta> maoJogador1 = cartas.Take(5).ToList();
                 List<Carta> maoJogador2 = cartas.Skip(5).Take(5).ToList();
 
                 EnumJogos jogo1 = RetornaJogo(maoJogador1);
                 EnumJogos jogo2 = RetornaJogo(maoJogador2);
 
-                if((int)jogo1 > (int)jogo2)
+                if ((int)jogo1 > (int)jogo2)
                 {
                     qtdVitoriasJogador1++;
                 }
-                else if ((int)jogo1 == (int)jogo2)
+
+                if ((int)jogo1 == (int)jogo2)
                 {
-                    if (Jogador1VenceDesempate(jogo1, maoJogador1, maoJogador2)) {
+                    if (Jogador1VenceDesempate(jogo1, maoJogador1, maoJogador2))
+                    {
                         qtdVitoriasJogador1++;
-                    }       
+                    }
                 }
 
                 //Console.WriteLine(linha);
@@ -113,7 +115,7 @@ namespace SolucionadorMaosPoker
 
         private static bool Jogador1VenceDesempate(EnumJogos jogo, List<Carta> maoJogador1, List<Carta> maoJogador2)
         {
-            if(jogo == EnumJogos.RoyalFlash)
+            if (jogo == EnumJogos.RoyalFlash)
             {
                 //cartas são iguais, então acontece empate
                 return false;
@@ -158,43 +160,41 @@ namespace SolucionadorMaosPoker
 
         private static EnumJogos RetornaJogo(List<Carta> maoJogador)
         {
-            if (PossuiSequencia(maoJogador))
+            if (royalFlash.ExisteNaMao(maoJogador))
             {
-                if (royalFlash.ExisteNaMao(maoJogador))
-                {
-                    return EnumJogos.RoyalFlash;
-                }
-                else if (straightFlush.ExisteNaMao(maoJogador))
-                {
-                    return EnumJogos.StraightFlush;
-                }
-                else
-                    return EnumJogos.Sequencia;
+                return EnumJogos.RoyalFlash;
             }
-            else if (PossuiCartaIgual(maoJogador))
+            else if (straightFlush.ExisteNaMao(maoJogador))
             {
-                if (quadra.ExisteNaMao(maoJogador))
-                {
-                    return EnumJogos.Quadra;
-                }
-                else if (fullhouse.ExisteNaMao(maoJogador))
-                {
-                    return EnumJogos.FullHouse;
-                }
-                else if (trinca.ExisteNaMao(maoJogador))
-                {
-                    return EnumJogos.Trinca;
-                }
-                else if (doispares.ExisteNaMao(maoJogador))
-                {
-                    return EnumJogos.DoisPares;
-                }
-                else
-                    return EnumJogos.UmPar;
+                return EnumJogos.StraightFlush;
+            }
+            else if (quadra.ExisteNaMao(maoJogador))
+            {
+                return EnumJogos.Quadra;
+            }
+            else if (fullhouse.ExisteNaMao(maoJogador))
+            {
+                return EnumJogos.FullHouse;
             }
             else if (flush.ExisteNaMao(maoJogador))
             {
                 return EnumJogos.Flush;
+            }
+            else if (sequencia.ExisteNaMao(maoJogador))
+            {
+                return EnumJogos.Sequencia;
+            }
+            else if (trinca.ExisteNaMao(maoJogador))
+            {
+                return EnumJogos.Trinca;
+            }
+            else if (doispares.ExisteNaMao(maoJogador))
+            {
+                return EnumJogos.DoisPares;
+            }
+            else if (umpar.ExisteNaMao(maoJogador))
+                    {
+                return EnumJogos.UmPar;
             }
             else
                 return EnumJogos.CartaAlta;
@@ -203,10 +203,10 @@ namespace SolucionadorMaosPoker
         private static bool PossuiCartaIgual(List<Carta> maoJogador)
         {
 
-            for(int i = 0; i < maoJogador.Count(); i++)
+            for (int i = 0; i < maoJogador.Count(); i++)
             {
                 int j = 1;
-                while(j < maoJogador.Count())
+                while (j < maoJogador.Count())
                 {
                     if (j > i && (maoJogador[i].Numero == maoJogador[j].Numero))
                     {
@@ -223,12 +223,13 @@ namespace SolucionadorMaosPoker
         private static bool PossuiSequencia(List<Carta> maoJogador)
         {
             int[] numerosCartas = new int[5];
-            for (int i = 0; i < maoJogador.Count(); i++){
+            for (int i = 0; i < maoJogador.Count(); i++)
+            {
                 numerosCartas[i] = util.ConverteNumeroCarta(maoJogador[i].Numero);
             }
 
             Array.Sort(numerosCartas);
-            
+
             if (numerosCartas[4] == 14 && numerosCartas[0] == 2)
             {
                 int[] cartasAsComoUm = numerosCartas;
@@ -257,6 +258,6 @@ namespace SolucionadorMaosPoker
             return true;
         }
 
-       
+
     }
 }

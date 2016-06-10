@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace SolucionadorMaosPoker
 {
-    class Program
+    class Program1
     {
         public static CartaAlta cartaAlta = new CartaAlta();
         public static RoyalFlash royalFlash = new RoyalFlash();
@@ -77,7 +77,7 @@ namespace SolucionadorMaosPoker
             int qtdLinhas = 0;
             string linha;
 
-            System.IO.StreamReader arquivo = new System.IO.StreamReader("pokerm.txt");
+            System.IO.StreamReader arquivo = new System.IO.StreamReader("pokerk.txt");
             while ((linha = arquivo.ReadLine()) != null)
             {
                 var cartas = linha.Split(' ').ToList().Select(x=> new Carta { Numero = x[0], Naipe = x[1]}).ToList();
@@ -208,7 +208,7 @@ namespace SolucionadorMaosPoker
                 int j = 1;
                 while(j < maoJogador.Count())
                 {
-                    if (j > i && (maoJogador[i].Numero == maoJogador[j].Numero))
+                    if (j > i & (maoJogador[i].Numero == maoJogador[j].Numero))
                     {
                         return true;
                     }
@@ -229,7 +229,7 @@ namespace SolucionadorMaosPoker
 
             Array.Sort(numerosCartas);
             
-            if (numerosCartas[4] == 14 && numerosCartas[0] == 2)
+            if (numerosCartas[4] == 14 & numerosCartas[0] == 2)
             {
                 int[] cartasAsComoUm = numerosCartas;
                 cartasAsComoUm[4] = 1;
@@ -244,7 +244,7 @@ namespace SolucionadorMaosPoker
                 return true;
             }
 
-            if (numerosCartas[4] <= 14 && numerosCartas[0] >= 2)
+            if (numerosCartas[4] <= 14 & numerosCartas[0] >= 2)
             {
                 for (int j = 0; j < numerosCartas.Length - 1; j += 1)
                 {
