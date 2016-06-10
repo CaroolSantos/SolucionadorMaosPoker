@@ -76,7 +76,7 @@ namespace SolucionadorMaosPoker
             int qtdLinhas = 0;
             string linha;
 
-            System.IO.StreamReader arquivo = new System.IO.StreamReader("c:/users/antonio/documents/visual studio 2015/Projects/SolucionadorMaosPoker/SolucionadorMaosPoker/pokerm.txt");
+            System.IO.StreamReader arquivo = new System.IO.StreamReader("pokerk.txt");
             while ((linha = arquivo.ReadLine()) != null)
             {
                 List<Carta> cartas = linha.Split(' ').ToList().Select(x=> new Carta { Numero = x[0], Naipe = x[1]}).ToList();
